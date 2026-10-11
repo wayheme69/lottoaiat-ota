@@ -1,0 +1,37 @@
+name: Update Lotto 6 aus 45 results
+
+on:
+  schedule:
+    # Tirages : mercredi 18:47 et dimanche 19:17 (Vienne), Bonus-Ziehung certains vendredis vers 18:40 ;
+    # Quoten publiées dans la soirée → passages 17:10-22:40 UTC mer/ven/dim, puis toutes les 6 h en filet de sécurité
+    - cron: "10,40 17-22 * * 0,3,5"
+    - cron: "23 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: results
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch results (official lotterien.at API)
+        run: python3 scripts/at_results.py
+      - name: Commit if changed
+        run: |
+          git config user.name "results-bot"
+          git config user.email "actions@github.com"
+          git add at_results.json history.json
+          if ! git diff --cached --quiet; then
+            git commit -m "results: $(date -u +%Y-%m-%dT%H:%MZ)"
+            git pull --rebase origin main
+            git push
+          else
+            echo "No change."
+          fi
