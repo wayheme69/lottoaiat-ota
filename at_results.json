@@ -1112,10 +1112,10 @@
   }
  ],
  "next": {
-  "date": "2026-10-25",
-  "salesClose": "2026-10-25 19:00:00",
-  "estimatedPrize": 1400000.0,
-  "jackpotCounter": 1
+  "date": "2026-10-28",
+  "salesClose": "2026-10-28 18:30:00",
+  "estimatedPrize": null,
+  "jackpotCounter": null
  },
- "updated": "2026-10-21T20:32Z"
+ "updated": "2026-10-25T19:31Z"
 }
